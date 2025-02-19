@@ -6,6 +6,7 @@
         <head>
             <title>User Management Application</title>
             <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+                <script src="ckeditor/ckeditor.js"></script>
         </head>
 
         <body>
@@ -43,6 +44,8 @@
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Country</th>
+                                <th>Description</th>
+                                <th>Picture</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -63,6 +66,12 @@
                                     <td>
                                         <c:out value="${user.country}" />
                                     </td>
+                                    <td>
+                                        <c:out value="${user.description}" />
+                                    </td>
+									<td>
+									    <img src="images/${user.picture}" alt="User Picture" width="100" height="100">
+									</td>
                                     <td><a href="edit?id=<c:out value='${user.id}' />">Edit</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="delete?id=<c:out value='${user.id}' />">Delete</a></td>
                                 </tr>
                             </c:forEach>
@@ -73,5 +82,4 @@
                 </div>
             </div>
         </body>
-
         </html>

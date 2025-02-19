@@ -1,15 +1,19 @@
 package web;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.List;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
 
 import dao.UserDAO;
 import model.User;
@@ -22,6 +26,12 @@ import model.User;
  */
 
 @WebServlet("/")
+@MultipartConfig(
+	    location = "/tmp",
+	    maxFileSize = 5242880,   // 5MB
+	    maxRequestSize = 20971520, // 20MB
+	    fileSizeThreshold = 1048576 // 1MB
+	)
 public class UserServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private UserDAO userDAO;
@@ -90,23 +100,55 @@ public class UserServlet extends HttpServlet {
     }
 
     private void insertUser(HttpServletRequest request, HttpServletResponse response)
-    throws SQLException, IOException {
+    throws SQLException, IOException, ServletException {
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String country = request.getParameter("country");
-        User newUser = new User(name, email, country);
+        String description = request.getParameter("description");
+        
+     // Xử lý upload file
+        Part filePart = request.getPart("picture");
+        String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+
+        String uploadPath = "C:\\Users\\Admin\\Desktop\\Lab2_J2EE_CRUD\\lab2_CRUD\\src\\main\\webapp\\images";
+
+        System.out.println("Upload path: " + uploadPath);
+
+        File uploadDir = new File(uploadPath);
+        if (!uploadDir.exists()) uploadDir.mkdir();
+
+        if (fileName != null && !fileName.isEmpty()) {
+            String filePath = uploadPath + File.separator + fileName;
+            filePart.write(filePath);
+        }
+        
+        User newUser = new User(name, email, country, description, fileName);
         userDAO.insertUser(newUser);
         response.sendRedirect("list");
     }
 
     private void updateUser(HttpServletRequest request, HttpServletResponse response)
-    throws SQLException, IOException {
+    throws SQLException, IOException, ServletException {
         int id = Integer.parseInt(request.getParameter("id"));
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String country = request.getParameter("country");
+        String description = request.getParameter("description");
+        // Xử lý upload file
+        Part filePart = request.getPart("picture");
+        String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
 
-        User book = new User(id, name, email, country);
+        String uploadPath = "C:\\Users\\Admin\\Desktop\\Lab2_J2EE_CRUD\\lab2_CRUD\\src\\main\\webapp\\images";
+
+        System.out.println("Upload path: " + uploadPath);
+        File uploadDir = new File(uploadPath);
+        if (!uploadDir.exists()) uploadDir.mkdir();
+
+        if (fileName != null && !fileName.isEmpty()) {
+            String filePath = uploadPath + File.separator + fileName;
+            filePart.write(filePath);
+        }
+        User book = new User(id, name, email, country, description, fileName);
         userDAO.updateUser(book);
         response.sendRedirect("list");
     }

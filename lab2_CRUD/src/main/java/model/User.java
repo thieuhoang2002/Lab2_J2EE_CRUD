@@ -11,22 +11,28 @@ public class User {
     protected String name;
     protected String email;
     protected String country;
+	private String description;
+	private String picture;
 
     public User() {}
 
-    public User(String name, String email, String country) {
+    public User(String name, String email, String country, String description, String picture) {
         super();
         this.name = name;
         this.email = email;
         this.country = country;
+        this.description = description;
+        this.picture = picture;
     }
 
-    public User(int id, String name, String email, String country) {
+    public User(int id, String name, String email, String country, String description, String picture) {
         super();
         this.id = id;
         this.name = name;
         this.email = email;
         this.country = country;
+        this.description = description;
+        this.picture = picture;
     }
 
     public int getId() {
@@ -52,5 +58,17 @@ public class User {
     }
     public void setCountry(String country) {
         this.country = country;
+    }
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    public String getPicture() {
+        return picture;
+    }
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 }

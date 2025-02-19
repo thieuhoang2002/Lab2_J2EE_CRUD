@@ -6,6 +6,8 @@
         <head>
             <title>User Management Application</title>
             <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+                <!-- Di chuyển CKEditor lên đây -->
+    <script src="ckeditor/ckeditor.js"></script>
         </head>
 
         <body>
@@ -26,10 +28,10 @@
                 <div class="card">
                     <div class="card-body">
                         <c:if test="${user != null}">
-                            <form action="update" method="post">
+                            <form action="update" method="post" enctype="multipart/form-data">
                         </c:if>
                         <c:if test="${user == null}">
-                            <form action="insert" method="post">
+                            <form action="insert" method="post" enctype="multipart/form-data">
                         </c:if>
 
                         <caption>
@@ -58,12 +60,25 @@
                         <fieldset class="form-group">
                             <label>User Country</label> <input type="text" value="<c:out value='${user.country}' />" class="form-control" name="country">
                         </fieldset>
+                        
+		                <fieldset class="form-group">
+		                    <label>User Description</label>
+		                    <input id="description" name="description" class="form-control" value="<c:out value='${user.description}' />">
+							    
+		                </fieldset>
+                        
+					    <fieldset class="form-group">
+					        <label>User Picture</label> 
+					        <input type="file" class="form-control" name="picture">
+					    </fieldset>
 
                         <button type="submit" class="btn btn-success">Save</button>
                         </form>
-                    </div>
+                <!-- CKEditor phải được gọi sau khi đã tải JS -->
+                <script>
+                    CKEDITOR.replace('description');
+                </script>
                 </div>
             </div>
         </body>
-
         </html>
